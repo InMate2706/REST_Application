@@ -39,17 +39,11 @@ public class UserController {
         return "admin";
     }
 
-    @RequestMapping(value = "/userPage", method = RequestMethod.GET)
-    public String userPage(@AuthenticationPrincipal User user, Model model) {
+    @GetMapping("/user")
+    public String userProfile(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
 
-        return "userPage";
-    }
-
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public @ResponseBody User getCurrentUser(@AuthenticationPrincipal User user) {
-
-        return user;
+        return "user";
     }
 
 }

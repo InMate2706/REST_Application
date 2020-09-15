@@ -1,6 +1,5 @@
 package com.example.CRUD_Application_springboot.service;
 
-import com.example.CRUD_Application_springboot.model.Role;
 import com.example.CRUD_Application_springboot.model.User;
 import com.example.CRUD_Application_springboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -47,6 +45,7 @@ public class UserService implements UserDetailsService {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+
         return true;
     }
 

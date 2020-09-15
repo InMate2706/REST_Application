@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,8 +26,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid pl-0">
         <div class="navbar-brand">
-                <span class="font-weight-bold" th:text="${admin.getEmail()}">
-            </span>
+                <span class="font-weight-bold" th:text="${admin.getEmail()}"></span>
+            <input th:value="${admin.getId()}" type="hidden" id="userId"></input>
             with roles:
             <span>
                 <th:block th:each="role : ${admin.getRoles()}">
@@ -36,7 +36,7 @@
             </span>
         </div>
         <div>
-            <p class="text-right text-muted my-2 my-sm-0"><a th:href="@{/logout}" class="text-right">Logout</a></p>
+            <p class="text-right text-secondary my-2 my-sm-0"><a th:href="@{/logout}" class="text-right text-muted">Logout</a></p>
         </div>
     </div>
 </nav>
@@ -117,8 +117,8 @@
                                             <div class="form-group">
                                                 <label class="label-add" for="newRoles">Role</label>
                                                 <select class="form-control" id="newRoles" name="newRoles" multiple="multiple" >
-                                                    <option value="1">ROLE_ADMIN</option>
-                                                    <option value="2">ROLE_USER</option>
+                                                    <option value="1">USER</option>
+                                                    <option value="2">ADMIN</option>
                                                 </select>
                                             </div>
                                             <button class="btn btn-success" type="button" onclick="addUser()" >Add new user</button>
@@ -173,7 +173,7 @@
                 <form id="editForm" class="form-edit">
                     <div class="form-group">
                         <label class="label-add" for="idEdit">ID</label>
-                        <input type="email" class="form-control" id="idEdit" placeholder="ID" readonly>
+                        <input type="email" class="form-control" id="idEdit" placeholder="ID" th:value="${user.getId()}" readonly>
                     </div>
                     <div class="form-group">
                         <label class="label-add" for="firstNameEdit">First name</label>
@@ -197,9 +197,9 @@
                     </div>
                     <div class="form-group">
                         <label class="label-add" for="editFormControlSelect">Role</label>
-                        <select class="form-control" id="editFormControlSelect" name="newRoles1" multiple="multiple" >
-                            <option  value ="1" id="1">ADMIN</option>
-                            <option value="2" id="2">USER</option>
+                        <select class="form-control" id="editFormControlSelect" name="newRoles" multiple="multiple" >
+                            <option  value ="1" id="1">USER</option>
+                            <option value="2" id="2">ADMIN</option>
                         </select>
                     </div>
                 </form>
@@ -247,8 +247,8 @@
                         <label class="label-add" for="deleteFormControlSelect">Role</label>
 
                         <select multiple class="form-control" id="deleteFormControlSelect">
-                            <option  value ="1" id="3" >ADMIN</option>
-                            <option  value="2" id="4">USER</option>
+                            <option  value ="1" id="3" >USER</option>
+                            <option  value="2" id="4">ADMIN</option>
                         </select>
                     </div>
                 </form>

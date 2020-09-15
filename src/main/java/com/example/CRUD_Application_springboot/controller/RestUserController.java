@@ -31,62 +31,31 @@ public class RestUserController {
         this.userService = userService;
     }
 
-//    @GetMapping(value = "/users")
-//    public ResponseEntity<List<User>> getAll() {
-//        List<User> users = userService.getUsers();
-//
-//        if (users == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        return new ResponseEntity<>(users, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("{id}")
-//    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
-//        User user = userService.findUserById(id);
-//
-//        if (user == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        userService.deleteById(id);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<User> saveUser(@RequestBody User user) {
-//
-//        if (!userService.save(user)) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
-//
-//    @PutMapping
-//    public ResponseEntity<User> updateUser(@RequestBody User user, @RequestParam String[] roles) {
-//
-//        if (user == null) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        userService.update(user);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
-    @GetMapping(value = "/users")
-    public List<User>getAllUsers() {
-        List<User> users = userService.getUsers();
+    @GetMapping(value = "/users/{id}")
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        User user = userService.findUserById(id);
 
-        return users;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/edit")
-    public void saveUser(@RequestBody User user,
-                         @RequestParam(value = "roles" , required = false) Long[] roles) {
+    @GetMapping(value = "/users")
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.getUsers();
 
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<User> updateUser(@RequestBody User user,
+                                           @RequestParam(value = "roles", required = false) Long[] roles) {
         if (roles != null) {
             Set<Role> userRoles = new HashSet<>();
 
@@ -97,16 +66,13 @@ public class RestUserController {
         }
 
         userService.update(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/users/{idDelete}")
-    public void deleteUser(@PathVariable Long idDelete) {
-        userService.deleteById(idDelete);
-    }
-
-    @PostMapping(value = "/users")
-    public void addUser(@RequestBody User user,
-                        @RequestParam(value = "roles" , required = false) Long[] roles) {
+    @PostMapping("/users")
+    public ResponseEntity<User> saveUser(@RequestBody User user,
+                                         @RequestParam(value = "roles", required = false) Long[] roles) {
         if (roles != null) {
             Set<Role> userRoles = new HashSet<>();
 
@@ -117,12 +83,7 @@ public class RestUserController {
         }
 
         userService.save(user);
-    }
 
-    @GetMapping(value = "/users/{id}")
-    public User userPage(@PathVariable Long id) {
-        User user = userService.findUserById(id);
-
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

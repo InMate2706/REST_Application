@@ -1,13 +1,13 @@
 $(document).ready(printUsers());
 
 function addUser() {
-    var roles = '?roles=';
-    var newRoles = $('#newRoles').val();
+    let roles = '?roles=';
+    const newRoles = $('#newRoles').val();
     newRoles.forEach(function (item) {
         roles += item + ',';
     })
-    var roles1 = roles.substr(0, roles.length - 1);
-    var jsonVar = {
+    const roles1 = roles.substr(0, roles.length - 1);
+    let jsonVar = {
         firstName: document.getElementById("firstName").value,
         lastName: document.getElementById("lastName").value,
         age: document.getElementById("age").value,
@@ -28,23 +28,22 @@ function addUser() {
 }
 
 function printUsers() {
-    var responce = fetch('http://localhost:8081/api/admin/users')
+    const response = fetch('http://localhost:8081/api/admin/users')
         .then((response) => {
             response.json().then((data) => {
                 data.forEach(function (r) {
-                    var roles = r.roles;
-                    var stringRoles = '';
-                    roles.forEach(function (item, i, roles) {
-                        stringRoles += item.role + ' ';
+                    let roles = r.roles;
+                    let stringRoles = '';
+                    roles.forEach(function (item) {
+                        stringRoles += item.name + ' ';
                     })
-                    console.log(r.firstName);
-                    var html = '<tr id=' + r.id + '>' +
+                    let html = '<tr id=' + r.id + '>' +
                         '<td>' + r.id + '</td>' +
                         '<td>' + r.firstName + '</td>' +
                         '<td>' + r.lastName + '</td>' +
                         '<td>' + r.email + '</td>' +
                         '<td>' + r.age + '</td>' +
-                        '<td>' + r.role + '</td>' +
+                        '<td>' + stringRoles + '</td>' +
                         '<td>' +
                         '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#editModalCenter" onclick="editUser(this)">' +
                         'Edit' +
@@ -62,10 +61,37 @@ function printUsers() {
         });
 }
 
+function getUser() {
+    $("#userInfo > tbody").empty();
+    const id = document.getElementById("userId").value;
+    const url = 'http://localhost:8081/api/admin/users/' + id
+    fetch(url)
+        .then((response) => {
+            response.json().then((data) => {
+                console.log(data)
+                const roles = data.roles;
+                let stringRoles = '';
+                roles.forEach(function (item) {
+                    stringRoles += item.name + ' ';
+                })
+                console.log(stringRoles)
+                let html = '<tr>' +
+                    '<td>' + data.id + '</td>' +
+                    '<td>' + data.firstName + '</td>' +
+                    '<td>' + data.lastName + '</td>' +
+                    '<td>' + data.email + '</td>' +
+                    '<td>' + data.age + '</td>' +
+                    '<td>' + stringRoles + '</td>' +
+                    '</tr>';
+                $('#userInfo').append(html);
+            })
+        })
+}
+
 function deleteRow(o) {
     userId = $(o).closest('tr').find('td').eq(0).text();
     document.getElementById('deleteForm').reset();
-    var url = 'http://localhost:8081/api/admin/users/' + userId;
+    const url = 'http://localhost:8081/api/admin/users/' + userId;
     fetch(url)
         .then((response) => {
             response.json().then((data) => {
@@ -74,9 +100,9 @@ function deleteRow(o) {
                 $('#lastNameDelete').val(data.lastName);
                 $('#emailDelete').val(data.email);
                 $('#ageDelete').val(data.age);
-                var roles = data.roles;
+                const roles = data.roles;
                 console.log(roles);
-                var newRoles = [];
+                let newRoles = [];
                 $('#newRoles option').each(function () {
                     newRoles[$(this).val()] = $(this).val();
                 });
@@ -91,42 +117,19 @@ function deleteRow(o) {
 }
 
 function deleteUser() {
-    var url = 'http://localhost:8081/api/admin/users/' + userId;
+    const url = 'http://localhost:8081/api/admin/users/' + userId;
     fetch(url, {
         method: 'DELETE',
     })
         .then(res => res.text())
         .then(res => console.log(res))
-    var table = document.getElementById("usersTable");
-    var selector = "tr[id='" + userId + "']";
-    var row = table.querySelector(selector);
+    const table = document.getElementById("usersTable");
+    const selector = "tr[id='" + userId + "']";
+    let row = table.querySelector(selector);
     row.parentElement.removeChild(row);
 }
 
-function getUser() {
-    $("#userInfo > tbody").empty();
-    var id = document.getElementById("userId").value;
-    var url = 'http://localhost:8081/api/admin/users/' + id;
-    fetch(url)
-        .then((response) => {
-            response.json().then((data) => {
-                var roles = data.roles;
-                var stringRoles = '';
-                roles.forEach(function (item,) {
-                    stringRoles += item.role + ' ';
-                })
-                var html = '<tr>' +
-                    '<td>' + data.id + '</td>' +
-                    '<td>' + data.firstName + '</td>' +
-                    '<td>' + data.lastName + '</td>' +
-                    '<td>' + data.email + '</td>' +
-                    '<td>' + data.age + '</td>' +
-                    '<td>' + stringRoles + '</td>' +
-                    '</tr>';
-                $('#userInfo').append(html);
-            })
-        })
-}
+
 
 function cleanForm() {
     document.getElementById('addForm').reset();
@@ -134,23 +137,25 @@ function cleanForm() {
 
 function editUser(o) {
     document.getElementById('editForm').reset();
-    var id = $(o).closest('tr').find('td').eq(0).text();
-    var url = 'http://localhost:8081/api/admin/users/' + id;
+    const id = $(o).closest('tr').find('td').eq(0).text();
+    const url = 'http://localhost:8081/api/admin/users/' + id;
     fetch(url)
         .then((response) => {
             response.json().then((data) => {
+                console.log(data)
                 $('#idEdit').val(data.id);
-                $('#firstNameEdit').val(data.firstName);
+                $('#firstNameEdit').val(data.firstName)
                 $('#lastNameEdit').val(data.lastName);
                 $('#emailEdit').val(data.email);
                 $('#ageEdit').val(data.age);
                 $('#editInputPassword').val(data.password);
-                var roles = data.roles;
-                var newRoles = [];
+                const roles = data.roles;
+                let newRoles = [];
                 $('#newRoles option').each(function () {
                     newRoles[$(this).val()] = $(this).val();
                 });
-                roles.forEach(function (item, i, roles) {
+                console.log(newRoles)
+                roles.forEach(function (item) {
                     if (newRoles.includes(String(item.id))) {
                         $('#editFormControlSelect option[id=' + item.id + ']').prop('selected', true);
                     }
@@ -160,13 +165,16 @@ function editUser(o) {
 }
 
 function updateUser() {
-    var roles = '?roles=';
-    var newRoles = $('#editFormControlSelect').val();
+    let roles = '?roles=';
+    const newRoles = $('#editFormControlSelect').val();
     newRoles.forEach(function (item) {
         roles += item + ',';
     })
-    var roles1 = roles.substr(0, roles.length - 1);
-    var jsonVar = {
+    console.log(newRoles)
+    console.log(roles)
+    const roles1 = roles.substr(0, roles.length - 1);
+    console.log(roles1)
+    const jsonVar = {
         id: document.getElementById("idEdit").value,
         firstName: document.getElementById("firstNameEdit").value,
         lastName: document.getElementById("lastNameEdit").value,
@@ -174,7 +182,7 @@ function updateUser() {
         email: document.getElementById("emailEdit").value,
         password: document.getElementById("editInputPassword").value
     };
-    var response = fetch('http://localhost:8081/api/admin/edit' + roles1, {
+    const response = fetch('http://localhost:8081/api/admin/edit' + roles1, {
         method: 'PUT',
         body: JSON.stringify(jsonVar),
         headers: {
@@ -186,4 +194,4 @@ function updateUser() {
     printUsers();
 }
 
-var userId;
+let userId;
