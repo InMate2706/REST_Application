@@ -36,7 +36,7 @@ public class User implements UserDetails {
     private String passwordConfirm;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role_table", joinColumns = @JoinColumn(name = "user_id"),
+    @JoinTable(name = "user_role_table",joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<Role> roles;
 
