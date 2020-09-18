@@ -1,6 +1,5 @@
 package com.example.CRUD_Application_springboot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,7 +8,6 @@ import java.util.Collection;
 import java.util.Set;
 
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "users_table")
 public class User implements UserDetails {
@@ -35,7 +33,7 @@ public class User implements UserDetails {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role_table",joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<Role> roles;
